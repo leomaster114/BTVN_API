@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/demo")
+@RequestMapping("/api/")
 public class RestApiController {
 
 	@Autowired
@@ -27,25 +27,25 @@ public class RestApiController {
 
 	}
 
-	@GetMapping("/person")
+	@GetMapping("/users")
 	public List<User> getPeople() {
 		return repository.getAllUser();
 	}
 
-	@GetMapping("/person/{personId}")
-	public User getPerson(@PathVariable(name = "personId") Integer personId) {
-		return repository.getUserById(personId);
+	@GetMapping("/users/{userId}")
+	public User getPerson(@PathVariable(name = "userId") Integer userId) {
+		return repository.getUserById(userId);
 
 	}
 
-	@PutMapping("/person/{personId}")
-	public ResponseEntity<?> editPerson(@PathVariable(name = "personId") Integer personId, @RequestBody User person) {
-		if (repository.getUserById(personId) == null) {
-			return new ResponseEntity<String>("Unable to update as User id: " + personId + " not found!",
+	@PutMapping("/users/{userId}")
+	public ResponseEntity<?> editPerson(@PathVariable(name = "userId") Integer userId, @RequestBody User user) {
+		if (repository.getUserById(userId) == null) {
+			return new ResponseEntity<String>("Unable to update as User id: " + userId + " not found!",
 					HttpStatus.NOT_FOUND);
 		}
-		repository.update(person);
-		return new ResponseEntity<User>(person, HttpStatus.OK);
+		repository.update(user);
+		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 //
 //	@DeleteMapping("/person/{personId}")
@@ -54,13 +54,13 @@ public class RestApiController {
 //		return ResponseEntity.ok().build();
 //	}
 
-	@PostMapping("/person")
-	public ResponseEntity<String> addPerson(@RequestBody User person) {
-		User user = repository.findUserByName(person.getUsername());
+	@PostMapping("/users")
+	public ResponseEntity<String> addPerson(@RequestBody User user1) {
+		User user = repository.findUserByName(user1.getUsername());
 		if (user != null) {
 			return new ResponseEntity<String>("username is existed, please select other username!", HttpStatus.IM_USED);
 		}
-		repository.addUser(person);
+		repository.addUser(user1);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 
 	}
